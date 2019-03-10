@@ -10,15 +10,19 @@ section .data
 	aa0l equ $-aa0s
 	aa1s db "Enter your name: "
 	aa1l equ $-aa1s
-	aa2s db "Register Success!",10
+	aa2s db "Enter your email address: "
 	aa2l equ $-aa2s
+	ss2s db "Register Success!",10
+	ss2l equ $-ss2s
 	filename db "database.txt",0
-	in01l db 0,0,0
 
 section .bss
 	in01s resb 72
+	in01l resb 4
+	in02s resb 72
+	in02l resb 4
+	file_dec resb 4
 	unixtime resb 12
-	file_dec resb 3
 
 section .text
 	global _start
@@ -32,8 +36,9 @@ p:
 _start:
 	call welcome
 	call get_name
+	call get_email
 	call get_time
-	call write_to_file
+	call save_to_db
 	call success
 	call exit
 
@@ -52,17 +57,31 @@ get_name:
 	mov rsi,in01s
 	mov rdx,72
 	syscall
-	dec rax
-	mov rsi,0
-	mov rdi,0
-	mov [in01s+rax],rdi
+	mov rdi,'|'
+	mov [in01s+rax-1],rdi
 	mov [in01l],ax
 	ret
 
-write_to_file:
+get_email:
+	mov rsi,aa2s
+	mov rdx,aa2l
+	call p
+	mov rax,0
+	mov rdi,0
+	mov rsi,in02s
+	mov rdx,72
+	syscall
+	dec rax
+	mov rsi,0
+	mov rdi,0
+	mov [in02s+rax],rdi
+	mov [in02l],ax
+	ret
+
+save_to_db:
 	mov rax,2
 	mov rdi,filename
-	mov rsi,1089 ; O_CREAT | O_APPEND | O_RWONLY
+	mov rsi,1089 ; O_CREAT | O_APPEND | O_WRONLY
 	mov rdx,493 ; Permission 0755
 	syscall
 	mov [file_dec],eax
@@ -74,6 +93,12 @@ write_to_file:
 	mov edi,[file_dec]
 	mov rsi,in01s
 	mov ax,[in01l]
+	mov rdx,rax
+	mov rax,1
+	syscall
+	mov edi,[file_dec]
+	mov rsi,in02s
+	mov ax,[in02l]
 	mov rdx,rax
 	mov rax,1
 	syscall
@@ -114,8 +139,8 @@ get_time:
 	ret
 
 success:
-	mov rsi,aa2s
-	mov rdx,aa2l
+	mov rsi,ss2s
+	mov rdx,ss2l
 	call p
 	ret
 
