@@ -13,6 +13,8 @@ section .data
 	aa2s db "Enter your email address: "
 	aa2l equ $-aa2s
 
+	ss0s db "Email is too short, please enter a longer email!",10
+	ss0l equ $-ss0s
 	ss1s db "Name is too short, please enter a longer name!",10
 	ss1l equ $-ss1s
 	ss2s db "Register Success!",10
@@ -82,6 +84,14 @@ get_email:
 	mov rsi,in02s
 	mov rdx,72
 	syscall
+	cmp rax,8
+	jge .get_email_success
+   .email_too_short:
+   	mov rsi,ss0s
+   	mov rdx,ss0l
+   	call p
+   	jmp get_email
+   .get_email_success:
 	dec rax
 	mov rsi,0
 	mov rdi,0
