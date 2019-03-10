@@ -1,5 +1,7 @@
 ;
 ; @author Ammar Faizi <ammarfaizi2@gmail.com> https://www.facebook.com/ammarfaizi2
+; @license MIT
+; @version 0.0.01
 ;
 section .data
 	aa0s db "Welcome to Tea Registration!",10
