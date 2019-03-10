@@ -1,12 +1,14 @@
-
+;
+; @author Ammar Faizi <ammarfaizi2@gmail.com> https://www.facebook.com/ammarfaizi2
+;
 section .data
 	aa0s db "Welcome to Tea Registration!",10
 	aa0l equ $-aa0s
 	aa1s db "Enter your name: "
 	aa1l equ $-aa1s
-	aa2s db "Berhasil!",10
+	aa2s db "Register Success!",10
 	aa2l equ $-aa2s
-	filename db "absensi.txt",0
+	filename db "database.txt",0
 	in01l db 0,0,0
 
 section .bss
@@ -48,7 +50,7 @@ get_name:
 	syscall
 	mov rdi,0
 	mov [in01s+rax+1],rdi
-	mov [in01l],eax
+	mov [in01l],rax
 	ret
 
 write_to_file:
