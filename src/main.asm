@@ -12,6 +12,9 @@ section .data
 	aa1l equ $-aa1s
 	aa2s db "Enter your email address: "
 	aa2l equ $-aa2s
+
+	ss1s db "Name is too short, please enter a longer name!",10
+	ss1l equ $-ss1s
 	ss2s db "Register Success!",10
 	ss2l equ $-ss2s
 	filename db "database.txt",0
@@ -57,6 +60,14 @@ get_name:
 	mov rsi,in01s
 	mov rdx,72
 	syscall
+	cmp rax,5
+	jge .get_name_success
+   .name_too_short:
+   	mov rsi,ss1s
+   	mov rdx,ss1l
+   	call p
+   	jmp get_name
+   .get_name_success:
 	mov rdi,'|'
 	mov [in01s+rax-1],rdi
 	mov [in01l],ax
