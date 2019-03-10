@@ -18,7 +18,7 @@ section .data
 section .bss
 	in01s resb 72
 	unixtime resb 12
-	file_dec resb 4	
+	file_dec resb 3
 
 section .text
 	global _start
@@ -52,30 +52,38 @@ get_name:
 	mov rsi,in01s
 	mov rdx,72
 	syscall
+	dec rax
+	mov rsi,0
 	mov rdi,0
-	mov [in01s+rax+1],rdi
-	mov [in01l],rax
+	mov [in01s+rax],rdi
+	mov [in01l],ax
 	ret
 
 write_to_file:
 	mov rax,2
 	mov rdi,filename
-	mov rsi,1089
-	mov rdx,493
+	mov rsi,1089 ; O_CREAT | O_APPEND | O_RWONLY
+	mov rdx,493 ; Permission 0755
 	syscall
-	mov [file_dec],rax
+	mov [file_dec],eax
 	mov rax,1
-	mov rdi,[file_dec]
+	mov edi,[file_dec]
 	mov rsi,unixtime
 	mov rdx,11
 	syscall
-	mov rax,1
-	mov rdi,[file_dec]
+	mov edi,[file_dec]
 	mov rsi,in01s
 	mov ax,[in01l]
 	mov rdx,rax
 	mov rax,1
 	syscall
+	push 10
+	mov rax,1
+	mov edi,[file_dec]
+	mov rsi,rsp
+	mov rdx,1
+	syscall
+	pop rax
 	ret
 
 get_time:
