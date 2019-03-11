@@ -101,13 +101,13 @@ get_email:
    	jmp get_email
 
    .check_mail:
-    mov eax,0
-    cmp eax,[email_ptr]
-    je .chk_1
-    mov eax,[email_ptr]
-    dec eax
-    mov [email_ptr],eax
-    jmp .ch_48
+	mov eax,0
+	cmp eax,[email_ptr]
+	je .chk_1
+	mov eax,[email_ptr]
+	dec eax
+	mov [email_ptr],eax
+	jmp .ch_48
 
    .next_check:
    	mov eax,[email_ptr]
