@@ -92,13 +92,11 @@ get_email:
 	mov [email_ptr],di
 	cmp rax,8
 	jge .check_mail
-
    .invalid_email:
    	mov rsi,ss0s
    	mov rdx,ss0l
    	call p
    	jmp get_email
-
    .check_mail:
 	mov eax,0
 	cmp eax,[email_ptr]
@@ -107,7 +105,6 @@ get_email:
 	dec eax
 	mov [email_ptr],eax
 	jmp .ch_48
-
    .next_check:
    	mov eax,[email_ptr]
 	inc eax
@@ -115,7 +112,6 @@ get_email:
    	mov edi,[email_ptr]
    	cmp edi,[in02l]
    	je .get_email_success
-
    .ch_48:
    	mov eax,[email_ptr]
    	mov al,[in02s+eax]
@@ -128,7 +124,6 @@ get_email:
    	cmp al,57 
    	jg .ch_65
    	jmp .next_check ; Goto .next_check
-   
    .ch_65:
    	cmp al,64
    	je .turn_on_at_flag
@@ -137,14 +132,12 @@ get_email:
    	cmp al,90
    	jg .ch_97
    	jmp .next_check
-   
    .ch_97:
    	cmp al,97
    	jl .invalid_email
    	cmp al,122
    	jg .invalid_email
    	jmp .next_check
-
    .chk_1:
    	mov eax,[email_ptr]
    	mov dil,[in02s+eax]
@@ -153,12 +146,10 @@ get_email:
    	inc eax
    	mov [email_ptr],eax
    	jmp .check_mail
-
    .turn_on_at_flag:
    	mov r9b,1
    	mov [at_flag],r9b
    	jmp .next_check
-
    .get_email_success:
    	mov r9b,[at_flag]
    	cmp r9b,0
