@@ -30,7 +30,6 @@ section .bss
 	email_ptr resb 4
 	file_dec resb 4
 	unixtime resb 12
-	hvq resb 1
 
 section .text
 	global _start
