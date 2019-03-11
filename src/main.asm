@@ -13,12 +13,13 @@ section .data
 	aa2s db "Enter your email address: "
 	aa2l equ $-aa2s
 
-	ss0s db "Email is too short, please enter a longer email!",10
+	ss0s db "Invalid email address, please enter a valid email!",10
 	ss0l equ $-ss0s
 	ss1s db "Name is too short, please enter a longer name!",10
 	ss1l equ $-ss1s
 	ss2s db "Register Success!",10
 	ss2l equ $-ss2s
+
 	filename db "database.txt",0
 
 section .bss
@@ -26,6 +27,8 @@ section .bss
 	in01l resb 4
 	in02s resb 72
 	in02l resb 4
+	at_flag resb 1
+	email_ptr resb 4
 	file_dec resb 4
 	unixtime resb 12
 
@@ -76,6 +79,8 @@ get_name:
 	ret
 
 get_email:
+	mov cx,1
+	mov [at_flag],cx
 	mov rsi,aa2s
 	mov rdx,aa2l
 	call p
@@ -84,13 +89,47 @@ get_email:
 	mov rsi,in02s
 	mov rdx,72
 	syscall
+	mov [in02l],eax
+	xor di,di
+	mov [email_ptr],di
 	cmp rax,8
-	jge .get_email_success
-   .email_too_short:
+	jge .check_mail
+
+   .invalid_email:
    	mov rsi,ss0s
    	mov rdx,ss0l
    	call p
    	jmp get_email
+
+   .check_mail:
+    mov eax,0
+    cmp [email_ptr],eax
+    je .chk_1
+    mov eax,[email_ptr]
+    dec eax
+    mov [email_ptr],eax
+   .sb_chk:
+   	mov eax,[email_ptr]
+   	inc eax
+   	mov [email_ptr],eax
+   	mov eax,[in02l]
+   	cmp [email_ptr],eax
+   	jl .sb_chk
+
+   .chk_1:
+   	mov eax,[email_ptr]
+   	mov di,[in02s+eax]
+   	cmp di,'@'
+   	je .invalid_email
+   	inc eax
+   	mov [email_ptr],eax
+   	jmp .check_mail
+
+   .turn_on_at_flag:
+   	mov cx,1
+   	mov [at_flag],cx
+   	jmp .check_mail
+
    .get_email_success:
 	dec rax
 	mov rsi,0
