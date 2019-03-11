@@ -19,18 +19,18 @@ section .data
 	ss1l equ $-ss1s
 	ss2s db "Register Success!",10
 	ss2l equ $-ss2s
-
+	at_flag db 0,0,0,0
 	filename db "database.txt",0
 
 section .bss
 	in01s resb 72
 	in01l resb 4
 	in02s resb 72
-	in02l resb 4
-	at_flag resb 1
+	in02l resb 4	
 	email_ptr resb 4
 	file_dec resb 4
 	unixtime resb 12
+	hvq resb 1
 
 section .text
 	global _start
@@ -79,8 +79,6 @@ get_name:
 	ret
 
 get_email:
-	mov cx,1
-	mov [at_flag],cx
 	mov rsi,aa2s
 	mov rdx,aa2l
 	call p
@@ -89,6 +87,7 @@ get_email:
 	mov rsi,in02s
 	mov rdx,72
 	syscall
+	dec eax
 	mov [in02l],eax
 	xor di,di
 	mov [email_ptr],di
@@ -103,22 +102,53 @@ get_email:
 
    .check_mail:
     mov eax,0
-    cmp [email_ptr],eax
+    cmp eax,[email_ptr]
     je .chk_1
     mov eax,[email_ptr]
     dec eax
     mov [email_ptr],eax
-   .sb_chk:
+    jmp .ch_48
+
+   .next_check:
    	mov eax,[email_ptr]
-   	inc eax
+    inc eax
    	mov [email_ptr],eax
-   	mov eax,[in02l]
-   	cmp [email_ptr],eax
-   	jl .sb_chk
+   	mov edi,[email_ptr]
+   	cmp edi,[in02l]
+   	je .get_email_success
+
+   .ch_48:
+   	mov eax,[email_ptr]
+   	mov al,[in02s+eax]
+   	cmp al,46 ; dot char '.'
+   	je .next_check
+   	cmp al,95 ; underscore char '_'
+   	je .next_check
+   	cmp al,48 ; Invalid if al < char '0'
+   	jl .invalid_email
+   	cmp al,57 
+   	jg .ch_65
+   	jmp .next_check ; Goto .next_check
+   
+   .ch_65:
+   	cmp al,64
+   	je .turn_on_at_flag
+   	cmp al,65
+   	jl .invalid_email
+   	cmp al,90
+   	jg .ch_97
+   	jmp .next_check
+   
+   .ch_97:
+   	cmp al,97
+   	jl .invalid_email
+   	cmp al,122
+   	jg .invalid_email
+   	jmp .next_check
 
    .chk_1:
    	mov eax,[email_ptr]
-   	mov di,[in02s+eax]
+   	mov dil,[in02s+eax]
    	cmp di,'@'
    	je .invalid_email
    	inc eax
@@ -126,11 +156,14 @@ get_email:
    	jmp .check_mail
 
    .turn_on_at_flag:
-   	mov cx,1
-   	mov [at_flag],cx
-   	jmp .check_mail
+   	mov r9b,1
+   	mov [at_flag],r9b
+   	jmp .next_check
 
    .get_email_success:
+   	mov r9b,[at_flag]
+   	cmp r9b,0
+   	je .invalid_email
 	dec rax
 	mov rsi,0
 	mov rdi,0
