@@ -2,7 +2,7 @@
 
 This program can be used for member registration, it saves the user input to a file which named `database.txt`. For every recorded input has its unixtime that represents to time when the user submitted their informations.
 
-If the file `database.txt` does not exist, the program will be automatically create this file.
+If the file `database.txt` does not exist, the program will be automatically create this file. Make sure the working directory is writeable, so that the program can create the file.
 
 ### File preview for database.txt after registration
 
