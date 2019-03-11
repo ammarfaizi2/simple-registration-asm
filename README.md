@@ -26,4 +26,6 @@ cd simple-registration-asm
 nasm -felf64 src/main.asm -o src/main.o
 
 ld src/main.o -o main
+
+./main # Run the program
 ```
