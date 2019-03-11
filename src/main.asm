@@ -111,7 +111,7 @@ get_email:
 
    .next_check:
    	mov eax,[email_ptr]
-    inc eax
+	inc eax
    	mov [email_ptr],eax
    	mov edi,[email_ptr]
    	cmp edi,[in02l]
