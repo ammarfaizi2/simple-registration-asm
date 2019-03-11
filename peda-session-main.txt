@@ -1,3 +1,2 @@
-break get_email.next_check
-break get_email.turn_on_at_flag
+break get_phone
 
