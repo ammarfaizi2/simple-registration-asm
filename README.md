@@ -7,11 +7,12 @@ If the file `database.txt` does not exist, the program will be automatically cre
 ### File preview for database.txt after registration
 
 ```
-1552289499|Ammar Faizi|ammarfaizi2@gmail.com
-1552289509|Septian Hari Nugroho|septianhari@gmail.com
-1552289525|Fernando Dioni|fernandodioni@gmail.com
-1552289549|Ian Mustafa|ianmustafa@gmail.com
-1552289564|Eko Prasetyo|ekoprasetyo@gmail.com
+1552293237|Ammar Faizi|ammarfaizi2@gmail.com|+6285867152777
+1552293253|Septian Hari Nugroho|septianhari@gmail.com|0857123123123
+1552293280|Fernano Dioni|fernando.dioni@gmail.com|087666333222
+1552293298|Ian Mustafa|ianmustafa@gmail.com|089123456678
+1552293319|Eko Prasetyo|ekoprasetyo@gmail.com|089993141000
+1552293344|Agil Baskar Gumilar|ab.gumilar@gmail.com|0827244129102
 ```
 
 
