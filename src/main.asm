@@ -19,7 +19,7 @@ section .data
 	ss1l equ $-ss1s
 	ss2s db "Register Success!",10
 	ss2l equ $-ss2s
-	at_flag db 0,0,0,0
+	at_flag db 0
 	filename db "database.txt",0
 
 section .bss
