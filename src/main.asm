@@ -153,8 +153,7 @@ get_email:
    .get_email_success:
    	mov r9b,[at_flag]
    	cmp r9b,0
-   	je .invalid_email
-	dec rax
+   	je .invalid_email	
 	mov rsi,0
 	mov rdi,0
 	mov [in02s+rax],rdi
