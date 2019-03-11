@@ -6,12 +6,14 @@
 ;
 
 section .data
-	aa0s db "Welcome to Tea Registration!",10
+	aa0s db "Welcome to Tea Inside Registration!",10
 	aa0l equ $-aa0s
 	aa1s db "Enter your name: "
 	aa1l equ $-aa1s
 	aa2s db "Enter your email address: "
 	aa2l equ $-aa2s
+	aa3s db "Enter your phone number: "
+	aa3l equ $-aa3s
 
 	ss0s db "Invalid email address, please enter a valid email!",10
 	ss0l equ $-ss0s
@@ -19,6 +21,10 @@ section .data
 	ss1l equ $-ss1s
 	ss2s db "Register Success!",10
 	ss2l equ $-ss2s
+	ss3s db "Phone number is too short, please enter a longer phone number",10
+	ss3l equ $-ss3s
+	ss4s db "Invalid phone number, please enter a valid phone number",10
+	ss4l equ $-ss4s
 	at_flag db 0
 	filename db "database.txt",0
 
@@ -26,8 +32,11 @@ section .bss
 	in01s resb 72
 	in01l resb 4
 	in02s resb 72
-	in02l resb 4	
+	in02l resb 4
+	in03s resb 30
+	in03l resb 4
 	email_ptr resb 4
+	phone_ptr resb 4
 	file_dec resb 4
 	unixtime resb 12
 
@@ -43,6 +52,7 @@ p:
 _start:
 	call welcome
 	call get_name
+	call get_phone
 	call get_email
 	call get_time
 	call save_to_db
@@ -76,6 +86,56 @@ get_name:
 	mov [in01s+rax-1],rdi
 	mov [in01l],ax
 	ret
+
+get_phone:
+	mov rsi,aa3s
+	mov rdx,aa3l
+	call p
+	mov rax,0
+	mov rdi,0
+	mov rsi,in03s
+	mov rdx,30
+	syscall
+	dec eax
+	mov [in03l],eax
+	cmp eax,10
+	jl .phone_num_too_short
+	mov eax,-1
+	mov [phone_ptr],eax
+	jmp .validate_phone
+   .phone_num_too_short:
+   	mov rsi,ss3s
+   	mov rdx,ss3l
+   	call p
+   	jmp get_phone
+   .invalid_phone_number:
+   	mov rsi,ss4s
+   	mov rdx,ss4l
+   	call p
+   	jmp get_phone
+   .validate_phone:
+   	mov eax,[phone_ptr]
+   	inc eax
+   	mov [phone_ptr],eax
+   	cmp eax,[in03l]
+   	je .get_phone_success
+   	mov al,[in03s+eax]
+   .chk_48:
+   	cmp al,43
+   	je .start_with_plus
+   	cmp al,48
+   	jl .invalid_phone_number
+   	cmp al,57
+   	jg .invalid_phone_number
+   	jmp .validate_phone
+   .start_with_plus:
+   	mov al,[phone_ptr]
+   	cmp al,0
+   	je .validate_phone
+   	jmp .invalid_phone_number
+   .get_phone_success:
+   	ret
+
 
 get_email:
 	mov rsi,aa2s
@@ -155,8 +215,9 @@ get_email:
    	cmp r9b,0
    	je .invalid_email	
 	mov rsi,0
-	mov rdi,0
+	mov rdi,'|'
 	mov [in02s+rax],rdi
+	inc ax
 	mov [in02l],ax
 	ret
 
@@ -181,6 +242,12 @@ save_to_db:
 	mov edi,[file_dec]
 	mov rsi,in02s
 	mov ax,[in02l]
+	mov rdx,rax
+	mov rax,1
+	syscall
+	mov edi,[file_dec]
+	mov rsi,in03s
+	mov ax,[in03l]
 	mov rdx,rax
 	mov rax,1
 	syscall
