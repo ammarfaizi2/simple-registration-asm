@@ -1,6 +1,6 @@
 # Simple Registration ASM
 
-This program can be used for member registration, it will save the user input to a file which named `database.txt`. For every recorded input has its unixtime that represents to time when the user finished submitted their information.
+This program can be used for member registration, it saves the user input to a file which named `database.txt`. For every recorded input has its unixtime that represents to time when the user submitted their informations.
 
 # Installation
 ```
