@@ -15,7 +15,6 @@ If the file `database.txt` does not exist, the program will be automatically cre
 1552293344|Agil Baskar Gumilar|ab.gumilar@gmail.com|0827244129102
 ```
 
-
 # Installation
 ```shell
 sudo apt install nasm -y
@@ -30,3 +29,6 @@ ld src/main.o -o main
 
 ./main # Run the program
 ```
+
+# Contribute
+I would be happy if you want to contribute and make this repository better. You can just submit a pull request :D
