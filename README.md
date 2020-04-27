@@ -1,8 +1,8 @@
 # Simple Registration ASM
 
-This program can be used for member registration, it saves the user input into a file which named `database.txt`. For every recorded input has its unixtime that represents to time when the user submitted their informations.
+This program can be used for member registration, it saves the user input into a file which named `database.txt`. For every recorded input has its unixtime that represents the time when the user submitted their informations.
 
-If the file `database.txt` does not exist, the program will be automatically create this file. Make sure the working directory is writeable, so that the program can create the file.
+If the file `database.txt` does not exist, the program will automatically create this file. Make sure the working directory is writeable, so the program can create the file.
 
 ### File preview for database.txt after registration
 
@@ -31,4 +31,4 @@ ld src/main.o -o main
 ```
 
 # Contribute
-I would be happy if you want to contribute and make this repository better. You can just submit a pull request :D
+You can just submit a pull request.
